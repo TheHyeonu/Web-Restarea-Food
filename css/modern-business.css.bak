@@ -1,0 +1,59 @@
+/*!
+ * Start Bootstrap - Modern Business (https://startbootstrap.com/template/modern-business)
+ * Copyright 2013-2020 Start Bootstrap
+ * Licensed under MIT (https://github.com/StartBootstrap/startbootstrap-logomodern-business-nav/blob/master/LICENSE)
+ */
+body {
+  padding-top: 56px;
+}
+
+.carousel-item {
+  height: 65vh;
+  min-height: 300px;
+  background: no-repeat center center scroll;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+.portfolio-item {
+  margin-bottom: 30px;
+}
+
+.container2,
+.container2-fluid,
+.container2-sm,
+.container2-md,
+.container2-lg,
+.container2-xl {
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+@media (min-width: 576px) {
+  .container2, .container2-sm {
+    max-width: 540px;
+  }
+}
+
+@media (min-width: 768px) {
+  .container2, .container2-sm, .container2-md {
+    max-width: 720px;
+  }
+}
+
+@media (min-width: 992px) {
+  .container2, .container2-sm, .container2-md, .container2-lg {
+    max-width: 960px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container2, .container2-sm, .container2-md, .container2-lg, .container2-xl {
+    max-width: 1140px;
+  }
+}
