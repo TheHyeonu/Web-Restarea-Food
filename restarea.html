@@ -26,8 +26,36 @@
   var count = 0;
 
   $(document).ready(function () {
+    map_load();
     restarea_list();
   });
+
+  function map_load() {
+    function load(url, cb, err) {
+      var element = document.createElement('script');
+      var parent = 'body';
+      var attr = 'src';
+
+      element.async = true;
+      element.onload = function () {
+        cb();
+      };
+      element.onerror = function () {
+        err();
+      };
+      element[attr] = url;
+      document[parent].appendChild(element);
+    }
+
+    function initMap() {
+      var url = 'https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=' + config.NAVER_MAP_API_KEY;
+      load(url, function () {
+        var map = new naver.maps.Map('restarea_map');
+      });
+    }
+
+    initMap();
+  }
 
   function restarea_list(pagetype) {
     if (pagetype == 0) {
@@ -126,13 +154,13 @@
       <small>Restarea list</small>
     </h1>
 
-    <div class="mb-4" id="accordion" role="tablist" aria-multiselectable="true">
+    <div class="mb-4" id="accordion" role="tablist" aria-multiselectable="true"></div>
 
-    </div>
+    <!-- Naver Map -->
+    <div id="restarea_map" style="width:100%;height:400px;"></div>
 
-    <!-- /.container -->
-
-    <ul class="pagination">
+    <!-- /.container  -->
+    <ul class="pagination" style="margin-top: 16px;">
       <li class="page-item"><a class="page-link" style="cursor:pointer" onclick="restarea_list(0)">이전</a></li>
       <li class="page-item"><a class="page-link" style="cursor:pointer" onclick="restarea_list(1)">다음</a></li>
     </ul>
