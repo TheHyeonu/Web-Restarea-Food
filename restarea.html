@@ -24,13 +24,15 @@
 
 <script>
   var count = 0;
+  var map;
+  var marker;
 
   $(document).ready(function () {
-    map_load();
+    restarea_map_result(127.042514, 37.459939);
     restarea_list();
   });
 
-  function map_load() {
+  function restarea_map_result(xValue, yValue) {
     function load(url, cb, err) {
       var element = document.createElement('script');
       var parent = 'body';
@@ -47,14 +49,23 @@
       document[parent].appendChild(element);
     }
 
-    function initMap() {
+    function initMap(xValue, yValue) {
       var url = 'https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=' + config.NAVER_MAP_API_KEY;
       load(url, function () {
-        var map = new naver.maps.Map('restarea_map');
+
+        map = new naver.maps.Map('restarea_map', {
+            center: new naver.maps.LatLng(yValue, xValue),
+            zoom: 15
+        });
+
+        marker = new naver.maps.Marker({
+            position: new naver.maps.LatLng(yValue, xValue),
+            map: map
+        });
       });
     }
 
-    initMap();
+    initMap(xValue, yValue);
   }
 
   function restarea_list(pagetype) {
@@ -98,7 +109,7 @@
             "<div class='card'>" +
             "<div class='card-header' role='tab' id='headlist" + (i + 1) + "'>" +
             "<h5 class='mb-0'>" +
-            "<a data-toggle='collapse' data-parent='#accordion' href='#list" + (i + 1) + "' aria-expanded='true' aria-controls='list" + (i + 1) + "'>" + $(data).find('list').eq(i).find('unitName').text() + '</a>' +
+            "<a data-toggle='collapse' data-parent='#accordion' href='#list" + (i + 1) + "' aria-expanded='true' aria-controls='list" + (i + 1) + "'onclick=restarea_map_marker('" + $(data).find('list').eq(i).find('xValue').text() + "','" + $(data).find('list').eq(i).find('yValue').text() +"')>" + $(data).find('list').eq(i).find('unitName').text() + '</a>' +
             '</h5>' +
             '</div>' +
             '</div>' +
@@ -117,6 +128,15 @@
         alert('통신 실패! 상태 : ' + req.status + ', ' + req.requestText + ', ' + req.error);
       } // 통신이 실패했을 때 수행될 콜백 함수
     });
+  }
+
+  // 휴게소 클릭 시 좌표 지도 출력
+  function restarea_map_marker(xValue, yValue){
+    var choice_latlng = new naver.maps.LatLng(yValue, xValue);
+
+    map.setCenter(choice_latlng);
+    marker.setPosition(choice_latlng);
+    map.setZoom(15, true);
   }
 
 </script>
