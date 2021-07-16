@@ -23,10 +23,18 @@
 </head>
 
 <script>
+  // 휴게소 페이징 카운트
   var count = 0;
+
+  // Naver Map 변수
   var map;
   var marker;
+
+  // 휴게소 대표 음식 변수
   var data_arr = new Array(10);
+
+  // 이전 휴게소 선택 데이터 행 변수
+  var collapse_row = "";
 
   $(document).ready(function () {
     restarea_map_result(127.042514, 37.459939);
@@ -63,6 +71,7 @@
             position: new naver.maps.LatLng(yValue, xValue),
             map: map
         });
+
       });
     }
 
@@ -96,6 +105,9 @@
     $('.container2').val('');
     $('.container2').html('');
     $('.container2').remove();
+
+    collapse_row = "";
+    data_arr = [];
 
     var myUrl = "http://data.ex.co.kr/openapi/locationinfo/locationinfoRest?key=" + config.EX_API_KEY + "&type=xml&numOfRows=10&pageNo=" + count;
     $.ajax({
@@ -135,6 +147,13 @@
 
   // 휴게소 클릭 시 좌표 지도 출력
   function restarea_choice(rowCount ,xValue, yValue){
+
+    if (collapse_row != ""){
+      document.getElementById('list' + collapse_row).setAttribute('class', 'collapse');
+    }
+
+    collapse_row = rowCount;
+
     var restarea_map_choice_latlng = new naver.maps.LatLng(yValue, xValue);
 
     map.setCenter(restarea_map_choice_latlng);
