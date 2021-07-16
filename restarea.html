@@ -131,11 +131,11 @@
   }
 
   // 휴게소 클릭 시 좌표 지도 출력
-  function restarea_map_marker(xValue, yValue){
-    var choice_latlng = new naver.maps.LatLng(yValue, xValue);
+  function restarea_choice(xValue, yValue){
+    var restarea_map_choice_latlng = new naver.maps.LatLng(yValue, xValue);
 
-    map.setCenter(choice_latlng);
-    marker.setPosition(choice_latlng);
+    map.setCenter(restarea_map_choice_latlng);
+    marker.setPosition(restarea_map_choice_latlng);
     map.setZoom(15, true);
   }
 
