@@ -176,9 +176,15 @@
       url : myUrl2,
       success : function(data2) {
         if($(data2).find('count').text() > 0) {  
+
           temp_batchMenu = $(data2).find('list').eq(0).find('batchMenu').text();
           temp_salePrice = $(data2).find('list').eq(0).find('salePrice').text();
-          $('#list' + rowCount)[0].innerHTML = "<div class='card-body'>대표메뉴: " + temp_batchMenu + "<br>금액: " + temp_salePrice + "</div>";
+
+          if(temp_batchMenu != '' && temp_salePrice != ''){
+            $('#list' + rowCount)[0].innerHTML = "<div class='card-body'>대표메뉴: " + temp_batchMenu + "<br>금액: " + temp_salePrice + "</div>";
+          }else{
+            $('#list' + rowCount)[0].innerHTML = "<div class='card-body'>현재 대표메뉴가 없습니다.</div>";
+          }
         }
       }
     });
