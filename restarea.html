@@ -26,6 +26,7 @@
   var count = 0;
   var map;
   var marker;
+  var data_arr = new Array(10);
 
   $(document).ready(function () {
     restarea_map_result(127.042514, 37.459939);
@@ -102,21 +103,23 @@
       dataType: 'xml', // 서버로부터 응답 받을 데이터 형식
       url: myUrl, // 통신할 대상 페이지가 있는 url 주소
       success: function (data) {
-
         for (var i = 0; i < 10; i++) {
+          data_arr[i] = $(data).find('list').eq(i).find('serviceAreaCode').text();
+
           $('body').append("<div class='container2'>" +
             //	Header(Title)
             "<div class='card'>" +
             "<div class='card-header' role='tab' id='headlist" + (i + 1) + "'>" +
             "<h5 class='mb-0'>" +
-            "<a data-toggle='collapse' data-parent='#accordion' href='#list" + (i + 1) + "' aria-expanded='true' aria-controls='list" + (i + 1) + "'onclick=restarea_choice('" + $(data).find('list').eq(i).find('xValue').text() + "','" + $(data).find('list').eq(i).find('yValue').text() +"')>" + $(data).find('list').eq(i).find('unitName').text() + '</a>' +
+            "<a data-toggle='collapse' data-parent='#accordion' href='#list" + (i + 1) + "' aria-expanded='true' aria-controls='list" + (i + 1) + "'onclick=restarea_choice('" + (i+1) + "','" + $(data).find('list').eq(i).find('xValue').text() + "','" + $(data).find('list').eq(i).find('yValue').text() +"')>" + $(data).find('list').eq(i).find('unitName').text() + '</a>' +
             '</h5>' +
             '</div>' +
             '</div>' +
             //	Detail(Content)
             "<div id='list" + (i + 1) + "' class='collapse' role='tabpanel' aria-labelledby='headlist" + (i + 1) + "'>" +
             "<div class='card-body'>" +
-            'xValue: ' + $(data).find('list').eq(i).find('xValue').text() + '<br>' + 'yValue: ' + $(data).find('list').eq(i).find('yValue').text() +
+            // 'xValue: ' + $(data).find('list').eq(i).find('xValue').text() + '<br>' + 'yValue: ' + $(data).find('list').eq(i).find('yValue').text() +
+            '' +
             '</div>' +
             '</div>' +
             '</div>');
@@ -131,12 +134,36 @@
   }
 
   // 휴게소 클릭 시 좌표 지도 출력
-  function restarea_choice(xValue, yValue){
+  function restarea_choice(rowCount ,xValue, yValue){
     var restarea_map_choice_latlng = new naver.maps.LatLng(yValue, xValue);
 
     map.setCenter(restarea_map_choice_latlng);
     marker.setPosition(restarea_map_choice_latlng);
     map.setZoom(15, true);
+
+    restarea_main_food(rowCount);
+  }
+
+  function restarea_main_food(rowCount){
+    var temp_serviceAreaCode = data_arr[rowCount-1];
+    var temp_batchMenu;
+    var temp_salePrice;
+    var temp_result;
+    var myUrl2 = "http://data.ex.co.kr/openapi/business/representFoodServiceArea?key=" + config.EX_API_KEY + "&type=xml&serviceAreaCode=" + temp_serviceAreaCode;
+
+    $.ajax({
+      type: 'get', // 통신방식 (GET/POST)
+      dataType: 'xml', // 서버로부터 응답 받을 데이터 형식
+      url : myUrl2,
+      success : function(data2) {
+        if($(data2).find('count').text() > 0) {  
+          temp_batchMenu = $(data2).find('list').eq(0).find('batchMenu').text();
+          temp_salePrice = $(data2).find('list').eq(0).find('salePrice').text();
+          $('#list' + rowCount)[0].innerHTML = "<div class='card-body'>대표메뉴: " + temp_batchMenu + "<br>금액: " + temp_salePrice + "</div>";
+        }
+      }
+    });
+
   }
 
 </script>
